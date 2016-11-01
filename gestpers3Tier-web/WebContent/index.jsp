@@ -1,61 +1,108 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    	               "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<%@page
+	import="eu.telecom_bretagne.cabinet_recrutement.data.model.Utilisateur"%>
+
+<%
+	Object utilisateur = session.getAttribute("utilisateur");
+%>
+
 
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Application de gestion du personnel</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Cabinet de recrutement</title>
+<link rel="stylesheet" href="./css/bootstrap.min.css" type="text/css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<link rel="stylesheet"
+	href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+<script src="./js/bootstrap.min.js"></script>
 </head>
-<body>
-	<h2>Gestion du personnel de LENTREPRISE</h2>
 
-	<p>
-		<b>Exécutez la fonctionnalité souhaitée</b>
-	</p>
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="index.jsp"> Accueil </a>
+		</div>
+		<div class="collapse navbar-collapse"
+			id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
 
-	<table BORDER=0 CELLSPACING=5 WIDTH="85%">
-		<tr VALIGN=TOP>
-			<td>Annuaire du personnel</td>
-			<td VALIGN=TOP WIDTH="30%"><a
-				href="/gestpers3Tier-web/AnnuaireServlet"><img
-					SRC="images/execute.gif" HSPACE=4 BORDER=0 align=TOP></img>
-					Exécuter</a></td>
-		</tr>
-		<tr VALIGN=TOP>
-			<td>Embaucher une personne</td>
-			<td VALIGN=TOP WIDTH="30%"><a
-				href="/gestpers3Tier-web/InsertServlet?type=personne"><img
-					SRC="images/execute.gif" HSPACE=4 BORDER=0 align=TOP></img>
-					Exécuter</a></td>
-		</tr>
-		<tr VALIGN=TOP>
-			<td>Licencier une personne</td>
-			<td VALIGN=TOP WIDTH="30%"><a
-				href="/gestpers3Tier-web/RemoveServlet?type=personne"><img
-					SRC="images/execute.gif" HSPACE=4 BORDER=0 align=TOP></img>
-					Exécuter</a></td>
-		</tr>
-		<tr VALIGN=TOP>
-			<td>Liste des services</td>
-			<td WIDTH="30%"><a href="/gestpers3Tier-web/ServicesServlet"><img
-					SRC="images/execute.gif" HSPACE=4 BORDER=0 align=TOP></img>
-					Exécuter</a></td>
-		</tr>
-		<tr VALIGN=TOP>
-			<td>Insérer un service</td>
-			<td WIDTH="30%"><a
-				href="/gestpers3Tier-web/InsertServlet?type=service"><img
-					SRC="images/execute.gif" HSPACE=4 BORDER=0 align=TOP></img>
-					Exécuter</a></td>
-		</tr>
-				<tr VALIGN=TOP>
-			<td>Fermer un service</td>
-			<td WIDTH="30%"><a
-				href="/gestpers3Tier-web/RemoveServlet?type=service"><img
-					SRC="images/execute.gif" HSPACE=4 BORDER=0 align=TOP></img>
-					Exécuter</a></td>
-		</tr>
-	</table>
+				<%if (utilisateur != null
+							&& utilisateur instanceof Utilisateur) {
+						Utilisateur u = (Utilisateur) utilisateur;
+				%>
+
+				<li><a href="deconnexion.jsp">DECONNEXION(USER_<%=u.getId()%>)
+				</a></li>
+
+				<%
+					} else {
+				%>
+
+				<li><a href="connexion.jsp">CONNEXION</a></li>
+
+				<%
+					}
+				%>
+
+				<li class="dropdown"><a href="#" class="dropdown-toggle"
+					data-toggle="dropdown" role="button" aria-haspopup="true"
+					aria-expanded="false">IMPRESSIONS <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						<li><a href="liste_demandes.jsp?id=<%=utilisateur.getId()%>">Liste des demandes d'impressions</a></li>
+						<li><a href="créer_demande.jsp">Créer une demande</a></li>
+
+						<%
+							if (utilisateur != null && utilisateur.getRole()=="responsable") {
+						%>
+
+						<li role="separator" class="divider"></li>
+						<li><a href="liste_demandes_responsable.jsp?id=<%=utilisateur.getId()%>">Liste
+								des demandes à valider</a></li>
+
+						<%
+							}
+						%>
+
+
+			<%
+				if (utilisateur != null && utilisateur.getRole()=="responsable") {
+			%>
+
+						<li><a href="liste_demandes_imprimeur.jsp%>">Liste
+								des demandes à imprimer</a></li>
+
+						<%
+							}
+						%>
+
+
+						<%
+							if (utilisateur != null && utilisateur.getRole()=="responsable") {
+						%>
+
+						<li><a href="liste_demandes_livreur.jsp%>">Liste
+								des demandes à livrer</a></li>
+
+						<%
+							}
+						%>
+
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
+<body class="container" style="text-align: center">
+	Bienvenue sur l'outil de gestion d'impression.
 </body>
+
 </html>
