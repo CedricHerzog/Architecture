@@ -2,10 +2,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 
 <%@page import="eu.telecom_bretagne.cabinet_recrutement.front.utils.ServicesLocator,
-                eu.telecom_bretagne.cabinet_recrutement.service.IServiceEntreprise,
-                eu.telecom_bretagne.cabinet_recrutement.service.IServiceCandidature,
-                eu.telecom_bretagne.cabinet_recrutement.data.model.Entreprise,
-                eu.telecom_bretagne.cabinet_recrutement.data.model.Candidature"%>
+                eu.telecom_bretagne.cabinet_recrutement.service.IServiceEmploye,
+                eu.telecom_bretagne.cabinet_recrutement.data.model.Employe"%>
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -57,9 +55,9 @@
       <%
   	else
   	{
-  		IServiceUtilisateur serviceUtilisateur = (IServiceUtilisateur) ServicesLocator.getInstance().getRemoteInterface("ServiceUtilisateur");
-  		Candidature candidature = serviceCandidature.getCandidature(identifiant);
-      if(candidature == null)
+  		IServiceEmploye serviceEmploye = (IServiceEmploye) ServicesLocator.getInstance().getRemoteInterface("ServiceUtilisateur");
+  		Employe em = serviceEmploye.getEmploye(identifiant);
+      if(em == null)
       {
         %>
         <p class="erreur">Erreur : il n'y a pas de candidature avec cet identifiant : <%=identifiant%></p>
@@ -68,7 +66,7 @@
       }
       else
       {
-        session.setAttribute("utilisateur",candidature);
+        session.setAttribute("utilisateur",em);
         response.sendRedirect("index.jsp");
       }
   	}

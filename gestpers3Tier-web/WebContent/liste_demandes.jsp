@@ -3,12 +3,11 @@
 
 <%@page
 	import="eu.telecom_bretagne.cabinet_recrutement.front.utils.ServicesLocator,
-                eu.telecom_bretagne.cabinet_recrutement.service.IServiceDemande,
                 java.util.HashSet,
                 java.util.Set,
-                eu.telecom_bretagne.cabinet_recrutement.front.utils.Utils,
+                eu.telecom_bretagne.cabinet_recrutement.front.utils.*,
                 eu.telecom_bretagne.cabinet_recrutement.data.model.Demande,
-                eu.telecom_bretagne.cabinet_recrutement.data.model.Utilisateur,
+                eu.telecom_bretagne.cabinet_recrutement.data.model.Employe,
                 java.util.List"%>
 
 <%

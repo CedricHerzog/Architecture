@@ -1,8 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-<%@page
-	import="eu.telecom_bretagne.cabinet_recrutement.data.model.Utilisateur"%>
+	<%@page
+	import="eu.telecom_bretagne.services.IServiceAuthentifier,
+	        eu.telecom_bretagne.data.model.Employe,
+	        eu.telecom_bretagne.front.utils.*"
+	%>
 
 <%
 	Object utilisateur = session.getAttribute("utilisateur");
@@ -35,8 +38,8 @@
 			<ul class="nav navbar-nav">
 
 				<%if (utilisateur != null
-							&& utilisateur instanceof Utilisateur) {
-						Utilisateur u = (Utilisateur) utilisateur;
+							&& utilisateur instanceof Employe) {
+						Employe u = (Employe) utilisateur;
 				%>
 
 				<li><a href="deconnexion.jsp">DECONNEXION(USER_<%=u.getId()%>)
