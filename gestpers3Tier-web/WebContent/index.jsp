@@ -2,8 +2,7 @@
 	pageEncoding="ISO-8859-1"%>
 
 	<%@page
-	import="eu.telecom_bretagne.services.IServiceAuthentifier,
-	        eu.telecom_bretagne.data.model.Employe,
+	import="eu.telecom_bretagne.data.model.Employe,
 	        eu.telecom_bretagne.front.utils.*"
 	%>
 

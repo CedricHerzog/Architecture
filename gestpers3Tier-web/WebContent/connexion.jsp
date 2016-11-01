@@ -2,8 +2,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 
 <%@page import="eu.telecom_bretagne.cabinet_recrutement.front.utils.ServicesLocator,
-                eu.telecom_bretagne.cabinet_recrutement.service.IServiceEmploye,
-                eu.telecom_bretagne.cabinet_recrutement.data.model.Employe"%>
+                eu.telecom_bretagne.cabinet_recrutement.service.IServiceAuthentifier,
+                eu.telecom_bretagne.cabinet_recrutement.data.model.Employe,
+				        eu.telecom_bretagne.front.utils.*"%>
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -55,8 +56,8 @@
       <%
   	else
   	{
-  		IServiceEmploye serviceEmploye = (IServiceEmploye) ServicesLocator.getInstance().getRemoteInterface("ServiceUtilisateur");
-  		Employe em = serviceEmploye.getEmploye(identifiant);
+  		IServiceAuthentifier serviceAuthentifier = (IServiceAuthentifier) ServicesLocator.getInstance().getRemoteInterface("ServiceUtilisateur");
+  		Employe em = serviceAuthentifier.getEmploye(identifiant);
       if(em == null)
       {
         %>
