@@ -1,10 +1,10 @@
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 
-<%@page import="eu.telecom_bretagne.cabinet_recrutement.front.utils.ServicesLocator,
-                eu.telecom_bretagne.cabinet_recrutement.service.IServiceAuthentifier,
-                eu.telecom_bretagne.cabinet_recrutement.data.model.Employe,
-				        eu.telecom_bretagne.front.utils.*"%>
+<%@page import="eu.telecom_bretagne.front.utils.*,
+                eu.telecom_bretagne.services.IServiceAuthentifier,
+                eu.telecom_bretagne.data.model.Employe,
+				java.util.List"%>
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -21,56 +21,61 @@
 </head>
 
 <body class="container" style="text-align:center">
+
 <h2>Connexion au systeme</h2>
 
 <p style="font-style: italic;">
-  Renseigner le nom d'utilisateur et le mot de passe associé pour se connecter.
+  Renseigner prenom, nom d'utilisateur et le mot de passe associ� pour se connecter.
 </p>
+
 <%
-  String identifiant = request.getParameter("identifiant");
-  if(identifiant == null) // Pas de param�tre "identifiant" => affichage du formulaire
+  String prenom = request.getParameter("prenom");
+  String nom = request.getParameter("nom");
+  String mdp = request.getParameter("mdp");
+  if(prenom == null || nom == null || mdp == null) // Pas de param�tre "identifiant" => affichage du formulaire
   {
   	%>
     <form action="connexion.jsp" method="get">
 		  <!-- <input type="hidden" name="action" value="connexion" /> -->
-		  <p>
-		    Identifiant : <input type="text" name="identifiant"/>
-		  </p>
-      <p>
-		    Password: <input type="text" name="mdp"/>
-		  </p>
-		  <p>
-		    <input type="submit" value="Connexion"/>
-		  </p>
+	
+     	<p> prenom : <input type="text" name="prenom"/> </p>
+	
+		<p> nom : <input type="text" name="nom"/> </p>
+		    
+      	<p> Password: <input type="text" name="mdp"/> </p>
+		  
+		<p> <input type="submit" value="Connexion"/> </p>
 		</form>
     <hr>
   	<%
   }
   else                    // Param�tre "identifiant" existant => connexion
   {
-  	if(identifiant.equals(""))
-  	{
-      %>
-      <p class="erreur">Veuillez renseignez votre numéro d'identifiant pour pouvoir vous connecter</p>
-      <a href="index.jsp">Retour...</a>
-      <%
-  	else
-  	{
-  		IServiceAuthentifier serviceAuthentifier = (IServiceAuthentifier) ServicesLocator.getInstance().getRemoteInterface("ServiceUtilisateur");
-  		Employe em = serviceAuthentifier.getEmploye(identifiant);
-      if(em == null)
-      {
-        %>
-        <p class="erreur">Erreur : il n'y a pas de candidature avec cet identifiant : <%=identifiant%></p>
-        <a href="index.jsp">Retour...</a>
-        <%
-      }
-      else
-      {
-        session.setAttribute("utilisateur",em);
-        response.sendRedirect("index.jsp");
-      }
-  	}
+	  	if(prenom == "" || nom == "" || mdp == "")
+	  	{
+	      %>
+	      <p class="erreur">Veuillez renseignez votre numéro d'identifiant pour pouvoir vous connecter</p>
+	      <a href="index.jsp">Retour...</a>
+	      <%
+	  	}
+	  	else
+	  	{
+		  	  IServiceAuthentifier serviceAuthentifier = (IServiceAuthentifier) ServicesLocator.getInstance().getRemoteInterface("ServiceAuthentifier");
+		  	  Employe em = serviceAuthentifier.authentifier(prenom, nom, mdp);
+		      if(em == null)
+		      {
+			        %>
+			        <p class="erreur">Erreur : il n'y a pas d'employe avec cet identifiant </p>
+			        <a href="index.jsp">Retour...</a>
+			        <%
+		      }
+		      else
+		      {
+		        session.setAttribute("utilisateur",em);
+		        response.sendRedirect("index.jsp");
+		      }
+	  	}
   }
+  
 %>
 </body>

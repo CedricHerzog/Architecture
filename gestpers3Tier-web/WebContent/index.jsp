@@ -1,13 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
-	<%@page
-	import="eu.telecom_bretagne.data.model.Employe,
-	        eu.telecom_bretagne.front.utils.*"
-	%>
+<%@page
+import="eu.telecom_bretagne.services.IServiceAuthentifier,
+		eu.telecom_bretagne.services.IServiceCreerDemande,
+		eu.telecom_bretagne.services.IServiceValiderDemande,
+		eu.telecom_bretagne.services.IServiceImprimerDemande,
+		eu.telecom_bretagne.services.IServiceLivrerDemande,
+		eu.telecom_bretagne.data.model.Employe,
+		eu.telecom_bretagne.data.model.Demande,
+		eu.telecom_bretagne.data.model.Document,
+		eu.telecom_bretagne.front.utils.*,
+		java.util.List"
+%>
 
 <%
 	Object utilisateur = session.getAttribute("utilisateur");
+
+	IServiceAuthentifier authServ = (IServiceAuthentifier) ServicesLocator.getInstance().getRemoteInterface("ServiceAuthentifier");
+	IServiceCreerDemande creerServ = (IServiceCreerDemande) ServicesLocator.getInstance().getRemoteInterface("ServiceCreerDemande");
+	IServiceValiderDemande validerServ = (IServiceValiderDemande) ServicesLocator.getInstance().getRemoteInterface("ServiceValiderDemande");
+	IServiceImprimerDemande imprimerServ = (IServiceImprimerDemande) ServicesLocator.getInstance().getRemoteInterface("ServiceImprimerDemande");
+	IServiceLivrerDemande livrerServ = (IServiceLivrerDemande) ServicesLocator.getInstance().getRemoteInterface("ServiceLivrerDemande");
+
 %>
 
 
@@ -36,69 +51,57 @@
 			id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 
-				<%if (utilisateur != null
-							&& utilisateur instanceof Employe) {
-						Employe u = (Employe) utilisateur;
-				%>
+				<% if (utilisateur != null && utilisateur instanceof Employe) { 
+				
+						Employe employe = (Employe) utilisateur;
+				
+						%>
 
-				<li><a href="deconnexion.jsp">DECONNEXION(USER_<%=u.getId()%>)
-				</a></li>
-
-				<%
-					} else {
-				%>
-
-				<li><a href="connexion.jsp">CONNEXION</a></li>
-
-				<%
-					}
-				%>
+						<li><a href="deconnexion.jsp">DECONNEXION(USER_<%=employe.getNom()%>)
+						</a></li>
 
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown" role="button" aria-haspopup="true"
 					aria-expanded="false">IMPRESSIONS <span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="liste_demandes.jsp?id=<%=utilisateur.getId()%>">Liste des demandes d'impressions</a></li>
-						<li><a href="créer_demande.jsp">Créer une demande</a></li>
+						<li><a href="liste_demandes.jsp?id=<%=employe.getEmployeid()%>">Liste des demandes d'impressions</a></li>
+						<li><a href="creer_demande.jsp">Créer une demande</a></li>
 
 						<%
-							if (utilisateur != null && utilisateur.getRole()=="responsable") {
+							if (employe != null && validerServ.estResponsable(employe.getEmployeid())) {
 						%>
 
 						<li role="separator" class="divider"></li>
-						<li><a href="liste_demandes_responsable.jsp?id=<%=utilisateur.getId()%>">Liste
+						<li><a href="liste_demandes_responsable.jsp?id=<%=employe.getEmployeid()%>">Liste
 								des demandes à valider</a></li>
 
-						<%
-							}
-						%>
+						<% } %>
 
 
-			<%
-				if (utilisateur != null && utilisateur.getRole()=="responsable") {
-			%>
+						<% if (employe != null && employe.getPoste().compareToIgnoreCase("imprimeur")==0) { %>
 
 						<li><a href="liste_demandes_imprimeur.jsp%>">Liste
 								des demandes à imprimer</a></li>
 
-						<%
-							}
-						%>
+						<% } %>
 
 
-						<%
-							if (utilisateur != null && utilisateur.getRole()=="responsable") {
-						%>
+						<% if (employe != null && employe.getPoste().compareToIgnoreCase("livreur")==0) { %>
 
 						<li><a href="liste_demandes_livreur.jsp%>">Liste
 								des demandes à livrer</a></li>
 
-						<%
-							}
-						%>
+						<% } %>
 
 					</ul>
 				</li>
+				
+				<% } else { %>
+
+						<li><a href="connexion.jsp">CONNEXION</a></li>
+
+				<% } %>
+				
 			</ul>
 		</div>
 	</div>

@@ -23,8 +23,14 @@ import="eu.telecom_bretagne.services.IServiceAuthentifier,
 	IServiceLivrerDemande livrerServ = (IServiceLivrerDemande) ServicesLocator.getInstance().getRemoteInterface("ServiceLivrerDemande");
 
 	String idUtilisateur = request.getParameter("id");
-	String idDemande = request.getParameter("demande");
-	creerServ.removeDemande(Integer.parseInt(idDemande));
+	String idDemandeValider = request.getParameter("demandeValider");
+	String idDemandeEnvoyer = request.getParameter("demandeEnvoyer");
+	if (idDemandeValider!=null) {
+		validerServ.validerDemande(Integer.parseInt(idDemandeValider));
+	}
+	else if(idDemandeEnvoyer!=null){
+		validerServ.envoyerDemande(Integer.parseInt(idDemandeEnvoyer));
+	}
 %>
 
 <html>
@@ -61,7 +67,7 @@ import="eu.telecom_bretagne.services.IServiceAuthentifier,
 
 		</tr>
 		<%
-			List<Demande> d = creerServ.getMyDemandes(Integer.parseInt(idUtilisateur));
+			List<Demande> d = validerServ.getMyDemandes(Integer.parseInt(idUtilisateur));
 			for (Demande dTemp : d) {
 
 				%>
@@ -83,7 +89,8 @@ import="eu.telecom_bretagne.services.IServiceAuthentifier,
 						<td><%=dTemp.getLivreur().getNom() %></td>
 					<% } %>
 					<td><%=dTemp.getDatelivraison() %></td>
-					<td><a href="liste_demandes.jsp?id=<%=employe.getEmployeid()&demande=dTemp.getDemandeid()%>"></a></td>
+					<td><a href="liste_demandes_valider.jsp?id=<%=employe.getEmployeid()&demandeValider=dTemp.getDemandeid()%>"></a></td>
+					<td><a href="liste_demandes_valider.jsp?id=<%=employe.getEmployeid()&demandeEnvoyer=dTemp.getDemandeid()%>"></a></td>
 				</tr>
 				<%
 

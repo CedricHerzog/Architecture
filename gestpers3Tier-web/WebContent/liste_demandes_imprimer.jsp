@@ -24,7 +24,7 @@ import="eu.telecom_bretagne.services.IServiceAuthentifier,
 
 	String idUtilisateur = request.getParameter("id");
 	String idDemande = request.getParameter("demande");
-	creerServ.removeDemande(Integer.parseInt(idDemande));
+	creerServ.imprimerDemande(Integer.parseInt(idDemande));
 %>
 
 <html>
@@ -61,7 +61,7 @@ import="eu.telecom_bretagne.services.IServiceAuthentifier,
 
 		</tr>
 		<%
-			List<Demande> d = creerServ.getMyDemandes(Integer.parseInt(idUtilisateur));
+			List<Demande> d = imprimerServ.getMyDemandes(Integer.parseInt(idUtilisateur));
 			for (Demande dTemp : d) {
 
 				%>
@@ -83,7 +83,7 @@ import="eu.telecom_bretagne.services.IServiceAuthentifier,
 						<td><%=dTemp.getLivreur().getNom() %></td>
 					<% } %>
 					<td><%=dTemp.getDatelivraison() %></td>
-					<td><a href="liste_demandes.jsp?id=<%=employe.getEmployeid()&demande=dTemp.getDemandeid()%>"></a></td>
+					<td><a href="liste_demandes_imprimer.jsp?id=<%=employe.getEmployeid()&demande=dTemp.getDemandeid()%>"></a></td>
 				</tr>
 				<%
 
